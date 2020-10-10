@@ -1,5 +1,6 @@
 package com.pluralsight.blog;
 
+import com.pluralsight.blog.data.AuthorRepository;
 import com.pluralsight.blog.data.DatabaseLoader;
 import com.pluralsight.blog.model.Post;
 import com.pluralsight.blog.data.PostRepository;
@@ -44,6 +45,9 @@ public class Module1_Tests {
 
     @Autowired
     private PostRepository postRepository;
+    
+    @Autowired
+    private AuthorRepository authorRepository;
 
     private PostRepository spyRepository;
 
@@ -51,7 +55,7 @@ public class Module1_Tests {
     public void setup() {
         Constructor<DatabaseLoader> constructor = null;
         try {
-            constructor = DatabaseLoader.class.getDeclaredConstructor(PostRepository.class);
+            constructor = DatabaseLoader.class.getDeclaredConstructor(PostRepository.class,AuthorRepository.class);
         } catch (NoSuchMethodException e) {
             //e.printStackTrace();
         }
@@ -96,7 +100,7 @@ public class Module1_Tests {
         // Check for DatabaseLoader constructor with PostRepository parameter
         Constructor<DatabaseLoader> constructor = null;
         try {
-            constructor = DatabaseLoader.class.getDeclaredConstructor(PostRepository.class);
+            constructor = DatabaseLoader.class.getDeclaredConstructor(PostRepository.class,AuthorRepository.class);
         } catch (NoSuchMethodException e) {
             //e.printStackTrace();
         }
@@ -108,7 +112,7 @@ public class Module1_Tests {
         // Check for @Autowired
         try {
             annotations =
-                    DatabaseLoader.class.getDeclaredConstructor(PostRepository.class).getDeclaredAnnotations();
+                    DatabaseLoader.class.getDeclaredConstructor(PostRepository.class,AuthorRepository.class).getDeclaredAnnotations();
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
@@ -122,6 +126,7 @@ public class Module1_Tests {
     public void task_3() {
 
         Mockito.when(spyRepository.saveAll(databaseLoader.randomPosts)).thenReturn(null);
+
         try {
             databaseLoader.run(new DefaultApplicationArguments(new String[]{}));
         } catch (Exception e) {
