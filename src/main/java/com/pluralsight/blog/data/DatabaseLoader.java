@@ -22,10 +22,12 @@ public class DatabaseLoader implements ApplicationRunner {
     public List<Post> randomPosts = new ArrayList<>();
     public List<Author> authors = new ArrayList<>();
     
+    
+    private final PostRepository postRepository;
+    
     @Autowired
-    private PostRepository postRepository;
-
-    public DatabaseLoader() {
+    public DatabaseLoader(PostRepository postRepository) {
+    	this.postRepository=postRepository;	
     }
 
     @Override
@@ -37,7 +39,7 @@ public class DatabaseLoader implements ApplicationRunner {
             String title = String.format(template, gadget);
             Post post = new Post(title, "Lorem ipsum dolor sit amet, consectetur adipiscing elit… ");
             randomPosts.add(post);
-            postRepository.saveAll(randomPosts);
         });
+        postRepository.saveAll(randomPosts);
     }
 }
